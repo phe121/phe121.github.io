@@ -40,7 +40,7 @@
 <p>*CachedThreadPool：可以称作可缓存线程池，它的特点在于线程数是几乎可以无限增加的（实际最大可以达到 Integer.MAX_VALUE，为 2^31-1，这个数非常大，所以基本不可能达到），而当线程闲置时还可以对线程进行回收。也就是说该线程池的线程数量不是固定不变的，当然它也有一个用于存储提交任务的队列，但这个队列是 SynchronousQueue，队列的容量为0，实际不存储任何任务，它只负责对任务进行中转和传递，所以效率比较高。</p>
 <p>*SingleThreadExecutor：它会使用唯一的线程去执行任务，原理和 FixedThreadPool 是一样的，只不过这里线程只有一个，如果线程在执行任务的过程中发生异常，线程池也会重新创建一个线程来执行后续的任务。这种线程池由于只有一个线程，所以非常适合用于所有任务都需要按被提交的顺序依次执行的场景，而前几种线程池不一定能够保障任务的执行顺序等于被提交的顺序，因为它们是多线程并行执行的。</p>
 <p>*SingleThreadScheduledExecutor：它实际和 ScheduledThreadPool 线程池非常相似，它只是 ScheduledThreadPool 的一个特例，内部只有一个线程。</p>
-<h3 id="简单讲一讲线程的生命周期"><a href="#简单讲一讲线程的生命周期" class="headerlink" title="简单讲一讲线程的生命周期"></a>简单讲一讲线程的生命周期</h3><p><img src="/assets/imgs/2024-05-14_144517.jpg" alt="线程池状态图"><br>线程池的五个状态如下</p>
+<h3 id="简单讲一讲线程的生命周期"><a href="#简单讲一讲线程的生命周期" class="headerlink" title="简单讲一讲线程的生命周期"></a>简单讲一讲线程的生命周期</h3><p><img src="/assets/imgs/2024-05-14_144517.jpg" alt="ThreadPool"><br>线程池的五个状态如下</p>
 <p>*RUNNING: 接收新的任务，并能继续处理 workQueue 中的任务</p>
 <p>*SHUTDOWN: 不再接收新的任务，不过能继续处理 workQueue 中的任务</p>
 <p>*STOP: 不再接收新的任务，也不再处理 workQueue 中的任务，并且会中断正在处理任务的线程</p>
@@ -53,13 +53,13 @@
 <p>*<strong>使用乐观锁</strong>：乐观锁机制可以提高并发性能，通过版本号或时间戳等方式，避免使用传统的悲观锁机制，减少不必要的阻塞。</p>
 <p>*<strong>使用无锁算法</strong>：无锁的数据结构和算法可以减少锁的开销和线程之间的竞争，如CAS操作、原子类等。</p>
 </div><div class="article_tags"><span> <i class="yufont icon-tag"></i> 标签: </span><a href="/tags/Java%E5%B9%B6%E5%8F%91/">Java并发</a></div></article><div class="article-copyright"><p>标题: <a href="/2024/05/14/Java%E5%B9%B6%E5%8F%91/">Java并发</a></p><p> 链接: <a href="/2024/05/14/Java%E5%B9%B6%E5%8F%91/">http://example.com/2024/05/14/Java%E5%B9%B6%E5%8F%91/</a></p><p> 版权声明: 若无特殊标注皆为 鹏少 原创版权, 转载请以链接形式注明作者及原始出处</p><p>最后编辑时间: 2024-05-14</p></div><div class="page_turning"><a class="page_up" href="/2024/05/13/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/"
-  style="background-image:url(/assets/imgs/2024-05-13_150615.jpg" alt="JVM示意图)">
+  style="background-image:url(/assets/imgs/2024-05-13_150615.jpg" alt="JVM)">
   <div class="inner"><span>上一篇:</span>
     <p>JVM知识点</p>
   </div>
 </a>
 <a class="page_down" href="javascript:;"
-style="background-image:url(/assets/images/random/16.jpg)">
+style="background-image:url(/assets/images/random/4.jpg)">
 <div class="inner"><span>下一篇:</span>
   <p>已经没有下一篇了</p>
 </div>

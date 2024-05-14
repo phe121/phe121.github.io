@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><link rel="shortcut icon" href="/assets/imgs/psd.svg" type="image/x-icon"><title>JVM知识点 | 鹏少的博客</title><meta name="keywords" content="Java虚拟机"><meta name="keywords" content=""><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3435803_wadmwlqwhps.css"><link rel="stylesheet" href="/style/index.css"><link rel="stylesheet" href="/assets/lib/prettify/prettify.css"><link rel="stylesheet" href="/assets/lib/fancybox/fancybox.css"><meta name="generator" content="Hexo 7.2.0"><link rel="alternate" href="/atom.xml" title="鹏少的博客" type="application/atom+xml">
 </head><body><div id="app"><header class="header yu13_p_30" id="header"><div class="header_left"><h1 class="yu13_logo"><a id="logo" href="/">鹏少的博客</a></h1></div><div class="header_right"><div class="header_search yu13_cursor yu13_hover" id="search"><i class="yufont icon-sousuo"></i></div><div class="line yu13_p_10"></div><nav class="header_nav"><ul class="nav"><li class="menu_nav"><a href="/"><i class="fas"></i><span> 首页</span></a></li><li class="menu_nav"><a href="/archives"><i class="fas"></i><span> 归档</span></a></li><li class="menu_nav"><a href="/categories"><i class="fas"></i><span> 分类</span></a></li><li class="menu_nav"><a href="/tags"><i class="fas"></i><span> 标签</span></a></li><li class="menu_nav"><a href="/./0204/index.html"><i class="fas"></i><span> 友情链接</span></a></li></ul></nav></div></header><div class="article_topbg" style="background-image: url('/assets/imgs/home_top.png')"><div class="topbg_container"><h1 class="title">JVM知识点</h1><div class="info"><div class="article_meta"><div class="left"><span class="avatar"><img class="yu13_img_rotate" src="/assets/imgs/avatar.png" alt=""/><a href="/about">鹏少</a></span><span><i class="yufont icon-yingyong"></i><a href="/categories/Java/">Java</a></span><span><i class="yufont icon-rili"></i>2024-5-14</span></div></div></div></div></div><div class="container log_container clearfix"><div class="article_content left"> <div class="article_main"><article class="content"><div class="content_text article_text"> <h3 id="JVM的内存区域和作用"><a href="#JVM的内存区域和作用" class="headerlink" title="JVM的内存区域和作用"></a>JVM的内存区域和作用</h3><p>JVM运行时内存共分为<strong>虚拟机栈、堆、元空间、程序计数器、本地方法栈</strong>五个部分。还有一部分内存叫直接内存，属于操作系统的本地内存，也是可以直接操作的。</p>
-<p><img src="/assets/imgs/2024-05-13_150615.jpg" alt="JVM示意图"></p>
+<p><img src="/assets/imgs/2024-05-13_150615.jpg" alt="JVM"></p>
 <p>JVM的内存结构主要分为以下几个部分：</p>
 <p>*元空间：元空间的本质和永久代类似，都是对JVM规范中方法区的实现。不过元空间与永久代之间最大的区别在于：元空间并不在虚拟机中，而是使用本地内存。</p>
 <p>*Java虚拟机栈：每个线程有一个私有的栈，随着线程的创建而创建。栈里面存着的是一种叫“栈帧”的东西，每个方法会创建一个栈帧，栈帧中存放了局部变量表（基本数据类型和对象引用）、操作数栈、方法出口等信息。栈的大小可以固定也可以动态扩展。</p>
@@ -34,13 +34,13 @@
 <h3 id="GC只会对堆进行GC吗？"><a href="#GC只会对堆进行GC吗？" class="headerlink" title="GC只会对堆进行GC吗？"></a>GC只会对堆进行GC吗？</h3><p>JVM 的垃圾回收器不仅仅会对堆进行垃圾回收，它还会对方法区进行垃圾回收。</p>
 <p>*堆（Heap）： 堆是用于存储对象实例的内存区域。大部分的垃圾回收工作都发生在堆上，因为大多数对象都会被分配在堆上，而垃圾回收的重点通常也是回收堆中不再被引用的对象，以释放内存空间。<br>*方法区（Method Area）： 方法区是用于存储类信息、常量、静态变量等数据的区域。虽然方法区中的垃圾回收与堆有所不同，但是同样存在对不再需要的常量、无用的类信息等进行清理的过程。</p>
 </div><div class="article_tags"><span> <i class="yufont icon-tag"></i> 标签: </span><a href="/tags/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/">Java虚拟机</a></div></article><div class="article-copyright"><p>标题: <a href="/2024/05/13/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/">JVM知识点</a></p><p> 链接: <a href="/2024/05/13/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/">http://example.com/2024/05/13/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/</a></p><p> 版权声明: 若无特殊标注皆为 鹏少 原创版权, 转载请以链接形式注明作者及原始出处</p><p>最后编辑时间: 2024-05-14</p></div><div class="page_turning"><a class="page_up" href="javascript:;"
-  style="background-image:url(/assets/images/random/1.jpg)">
+  style="background-image:url(/assets/images/random/12.jpg)">
   <div class="inner"><span>上一篇:</span>
     <p>已经没有上一篇了</p>
   </div>
 </a>
 <a class="page_down" href="/2024/05/14/Java%E5%B9%B6%E5%8F%91/"
-style="background-image:url(/assets/imgs/2024-05-14_144517.jpg" alt="线程池状态图)">
+style="background-image:url(/assets/imgs/2024-05-14_144517.jpg" alt="ThreadPool)">
 <div class="inner"><span>下一篇:</span>
   <p>Java并发</p>
 </div>
