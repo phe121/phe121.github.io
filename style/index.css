@@ -1033,7 +1033,7 @@ mobile_nav_box z-index 99
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url('/assets/imgs/home_top.png');
+  background-image: url('/assets/imgs/home_top_2.png');
   animation: fade-in .5s;
 }
 

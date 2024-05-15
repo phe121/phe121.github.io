@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-05-14T07:23:20.283Z</updated>
+  <updated>2024-05-15T02:37:27.967Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java基础</title>
+    <link href="http://example.com/2024/05/15/Java%E5%9F%BA%E7%A1%80/"/>
+    <id>http://example.com/2024/05/15/Java%E5%9F%BA%E7%A1%80/</id>
+    <published>2024-05-15T02:28:31.000Z</published>
+    <updated>2024-05-15T02:37:27.967Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h3><p>*BIO（blocking IO）：就是传统的 java.io 包，它是基于流模型实现的，交互的方式是同步、阻塞方式，也就是说在读入输入流或者输出流时，在读写动作完成之前，线程会一直阻塞在那里，它们之间的调用是可靠的线性顺序。优点是代码比较简单、直观；缺点是 IO 的效率和扩展性很低，容易成为应用性能瓶颈。</p><p>*NIO（non-blocking IO） ：Java 1.4 引入的 java.nio 包，提供了 Channel、Selector、Buffer 等新的抽象，可以构建多路复用的、同步非阻塞 IO 程序，同时提供了更接近操作系统底层高性能的数据操作方式。</p><p>*AIO（Asynchronous IO） ：是 Java 1.7 之后引入的包，是 NIO 的升级版本，提供了异步非堵塞的 IO 操作方式，所以人们叫它 AIO（Asynchronous IO），异步 IO 是基于事件和回调机制实现的，也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，操作系统会通知相应的线程进行后续的操作。</p><h3 id="有哪个框架用到NIO"><a href="#有哪个框架用到NIO" class="headerlink" title="有哪个框架用到NIO"></a>有哪个框架用到NIO</h3><p>Netty 的 I&#x2F;O 模型是基于非阻塞 I&#x2F;O 实现的，底层依赖的是 NIO 框架的多路复用器 Selector。采用 epoll 模式后，只需要一个线程负责 Selector 的轮询。当有数据处于就绪状态后，需要一个事件分发器（Event Dispather），它负责将读写事件分发给对应的读写事件处理器（Event Handler）。事件分发器有两种设计模式：Reactor 和 Proactor，Reactor 采用同步 I&#x2F;O， Proactor 采用异步 I&#x2F;O。</p><p><img src="/assets/imgs/2024-05-15_102831.png" alt="NIO"></p><p>Reactor 实现相对简单，适合处理耗时短的场景，对于耗时长的 I&#x2F;O 操作容易造成阻塞。Proactor 性能更高，但是实现逻辑非常复杂，适合图片或视频流分析服务器，目前主流的事件驱动模型还是依赖 select 或 epoll 来实现。</p><h3 id="讲一讲String、StringBuffer和StringBuilder的区别"><a href="#讲一讲String、StringBuffer和StringBuilder的区别" class="headerlink" title="讲一讲String、StringBuffer和StringBuilder的区别"></a>讲一讲String、StringBuffer和StringBuilder的区别</h3><p><strong>区别</strong>：</p><p>*String 是 Java 中基础且重要的类，被声明为 final class，是不可变字符串。因为它的不可变性，所以拼接字符串时候会产生很多无用的中间对象，如果频繁的进行这样的操作对性能有所影响。</p><p>*StringBuffer 就是为了解决大量拼接字符串时产生很多中间对象问题而提供的一个类。它提供了 append 和 add 方法，可以将字符串添加到已有序列的末尾或指定位置，它的本质是一个线程安全的可修改的字符序列。在很多情况下我们的字符串拼接操作不需要线程安全，所以 StringBuilder 登场了。</p><p>*StringBuilder 是 JDK1.5 发布的，它和 StringBuffer 本质上没什么区别，就是去掉了保证线程安全的那部分，减少了开销。</p><p><strong>线程安全</strong>：</p><p>*StringBuffer：线程安全</p><p>*StringBuilder：线程不安全</p><p><strong>速度</strong>： 一般情况下，速度从快到慢为 StringBuilder &gt; StringBuffer &gt; String，当然这是相对的，不是绝对的。</p><p><strong>使用场景</strong>：</p><p>*操作少量的数据使用 String。</p><p>*单线程操作大量数据使用 StringBuilder。</p><p>*多线程操作大量数据使用 StringBuffer。</p><h3 id="讲一讲Java注解的原理"><a href="#讲一讲Java注解的原理" class="headerlink" title="讲一讲Java注解的原理"></a>讲一讲Java注解的原理</h3><p>注解本质是一个继承了Annotation的特殊接口，其具体实现类是Java运行时生成的动态代理类。</p><p>我们通过反射获取注解时，返回的是Java运行时生成的动态代理对象。通过代理对象调用自定义注解的方法，会最终调用AnnotationInvocationHandler的invoke方法。该方法会从memberValues这个Map中索引出对应的值。而memberValues的来源是Java常量池。</p><h3 id="Java注解的作用域"><a href="#Java注解的作用域" class="headerlink" title="Java注解的作用域"></a>Java注解的作用域</h3><p>注解的作用域（Scope）指的是注解可以应用在哪些程序元素上，例如类、方法、字段等。Java注解的作用域可以分为三种：</p><p>1、类级别作用域：用于描述类的注解，通常放置在类定义的上面，可以用来指定类的一些属性，如类的访问级别、继承关系、注释等。</p><p>2、方法级别作用域：用于描述方法的注解，通常放置在方法定义的上面，可以用来指定方法的一些属性，如方法的访问级别、返回值类型、异常类型、注释等。</p><p>3、字段级别作用域：用于描述字段的注解，通常放置在字段定义的上面，可以用来指定字段的一些属性，如字段的访问级别、默认值、注释等。</p><p>除了这三种作用域，Java还提供了其他一些注解作用域，例如构造函数作用域和局部变量作用域。这些注解作用域可以用来对构造函数和局部变量进行描述和注释。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h3 id=&quot;NIO&quot;&gt;&lt;a href=&quot;#NIO&quot; class=&quot;headerlink&quot; title=&quot;NIO&quot;&gt;&lt;/a&gt;NIO&lt;/h3&gt;&lt;p&gt;*BIO（blocking IO）：就是传统的 java.io 包，它是基于流模型实现的，交互的方式是同步、阻塞方式，也就是说在读入</summary>
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    
+    <category term="Java基础" scheme="http://example.com/tags/Java%E5%9F%BA%E7%A1%80/"/>
+    
+  </entry>
   
   <entry>
     <title>Java并发</title>
