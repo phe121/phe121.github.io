@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><link rel="shortcut icon" href="/assets/imgs/psd.svg" type="image/x-icon"><title>Spring相关问题 | 鹏少的博客</title><meta name="keywords" content="Spring"><meta name="keywords" content=""><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3435803_wadmwlqwhps.css"><link rel="stylesheet" href="/style/index.css"><link rel="stylesheet" href="/assets/lib/prettify/prettify.css"><link rel="stylesheet" href="/assets/lib/fancybox/fancybox.css"><meta name="generator" content="Hexo 7.2.0"><link rel="alternate" href="/atom.xml" title="鹏少的博客" type="application/atom+xml">
+</head><body><div id="app"><header class="header yu13_p_30" id="header"><div class="header_left"><h1 class="yu13_logo"><a id="logo" href="/">鹏少的博客</a></h1></div><div class="header_right"><div class="header_search yu13_cursor yu13_hover" id="search"><i class="yufont icon-sousuo"></i></div><div class="line yu13_p_10"></div><nav class="header_nav"><ul class="nav"><li class="menu_nav"><a href="/"><i class="fas"></i><span> 首页</span></a></li><li class="menu_nav"><a href="/archives"><i class="fas"></i><span> 归档</span></a></li><li class="menu_nav"><a href="/categories"><i class="fas"></i><span> 分类</span></a></li><li class="menu_nav"><a href="/tags"><i class="fas"></i><span> 标签</span></a></li><li class="menu_nav"><a href="/./0204/index.html"><i class="fas"></i><span> 友情链接</span></a></li></ul></nav></div></header><div class="article_topbg" style="background-image: url('/assets/imgs/home_top_2.png')"><div class="topbg_container"><h1 class="title">Spring相关问题</h1><div class="info"><div class="article_meta"><div class="left"><span class="avatar"><img class="yu13_img_rotate" src="/assets/imgs/avatar.png" alt=""/><a href="/about">鹏少</a></span><span><i class="yufont icon-yingyong"></i><a href="/categories/Spring/">Spring</a></span><span><i class="yufont icon-rili"></i>2024-5-16</span></div></div></div></div></div><div class="container log_container clearfix"><div class="article_content left"> <div class="article_main"><article class="content"><div class="content_text article_text"> <h3 id="Spring-Bean的scope（作用域）有哪些"><a href="#Spring-Bean的scope（作用域）有哪些" class="headerlink" title="Spring Bean的scope（作用域）有哪些"></a>Spring Bean的scope（作用域）有哪些</h3><p>Bean 的 scope（作用域）定义了 Bean 实例的生命周期及可见范围，常见的 Bean scope：</p>
+<ul>
+<li><p><strong>Singleton（单例）</strong>：在整个应用程序中只存在一个 Bean 实例。默认作用域，Spring 容器中只会创建一个 Bean 实例，并在容器的整个生命周期中共享该实例。</p>
+</li>
+<li><p><strong>Prototype（原型）</strong>：每次请求时都会创建一个新的 Bean 实例。次从容器中获取该 Bean 时都会创建一个新实例，适用于状态非常瞬时的 Bean。</p>
+</li>
+<li><p><strong>Request（请求）</strong>：每个 HTTP 请求都会创建一个新的 Bean 实例。仅在 Spring Web 应用程序中有效，每个 HTTP 请求都会创建一个新的 Bean 实例，适用于 Web 应用中需求局部性的 Bean。</p>
+</li>
+<li><p><strong>Session（会话）</strong>：Session 范围内只会创建一个 Bean 实例。该 Bean 实例在用户会话范围内共享，仅在 Spring Web 应用程序中有效，适用于与用户会话相关的 Bean。</p>
+</li>
+<li><p><strong>Application</strong>：当前 ServletContext 中只存在一个 Bean 实例。仅在 Spring Web 应用程序中有效，该 Bean 实例在整个 ServletContext 范围内共享，适用于应用程序范围内共享的 Bean。</p>
+</li>
+<li><p><strong>WebSocket（Web套接字）</strong>：在 WebSocket 范围内只存在一个 Bean 实例。仅在支持 WebSocket 的应用程序中有效，该 Bean 实例在 WebSocket 会话范围内共享，适用于 WebSocket 会话范围内共享的 Bean。</p>
+</li>
+<li><p><strong>Custom scopes（自定义作用域）</strong>：Spring 允许开发者定义自定义的作用域，通过实现 Scope 接口来创建新的 Bean 作用域。</p>
+</li>
+</ul>
+<h3 id="讲一讲AOP的实现方式"><a href="#讲一讲AOP的实现方式" class="headerlink" title="讲一讲AOP的实现方式"></a>讲一讲AOP的实现方式</h3><p>Spring的AOP实现原理其实很简单，就是通过动态代理实现的。如果我们为Spring的某个bean配置了切面，那么Spring在创建这个bean的时候，实际上创建的是这个bean的一个代理对象，我们后续对bean中方法的调用，实际上调用的是代理类重写的代理方法。而Spring的AOP使用了两种动态代理，分别是JDK的动态代理，以及CGLib的动态代理。</p>
+<ul>
+<li><p><strong>基于JDK的动态代理</strong>：Spring默认使用JDK的动态代理实现AOP，类如果实现了接口，Spring就会使用这种方式实现动态代理。熟悉Java语言的应该会对JDK动态代理有所了解。JDK实现动态代理需要两个组件，首先第一个就是InvocationHandler接口。我们在使用JDK的动态代理时，需要编写一个类，去实现这个接口，然后重写invoke方法，这个方法其实就是我们提供的代理方法。然后JDK动态代理需要使用的第二个组件就是Proxy这个类，我们可以通过这个类的newProxyInstance方法，返回一个代理对象。生成的代理类实现了原来那个类的所有接口，并对接口的方法进行了代理，我们通过代理对象调用这些方法时，底层将通过反射，调用我们实现的invoke方法。</p>
+</li>
+<li><p><strong>基于CGLIB的动态代理</strong>：JDK的动态代理存在限制，那就是被代理的类必须是一个实现了接口的类，代理类需要实现相同的接口，代理接口中声明的方法。若需要代理的类没有实现接口，此时JDK的动态代理将没有办法使用，于是Spring会使用CGLib的动态代理来生成代理对象。CGLib直接操作字节码，生成类的子类，重写类的方法完成代理。</p>
+</li>
+</ul>
+<h3 id="JDK-Proxy和CGLib还有别的实现AOP的方式吗？"><a href="#JDK-Proxy和CGLib还有别的实现AOP的方式吗？" class="headerlink" title="JDK Proxy和CGLib还有别的实现AOP的方式吗？"></a>JDK Proxy和CGLib还有别的实现AOP的方式吗？</h3><p><strong>静态代理</strong>：通过 AOP 框架提供的命令进行编译，从而在编译阶段生成 AOP 代理类。这种方式也被称为编译时增强。静态代理包括编译时编织和类加载时编织两种方式。</p>
+<h3 id="讲一讲对Spring-Boot的理解，以及为什么要用Spring-Boot？"><a href="#讲一讲对Spring-Boot的理解，以及为什么要用Spring-Boot？" class="headerlink" title="讲一讲对Spring Boot的理解，以及为什么要用Spring Boot？"></a>讲一讲对Spring Boot的理解，以及为什么要用Spring Boot？</h3><p>在使用Spring框架进行开发的过程中，需要配置很多Spring框架包的依赖，如spring-core、spring-bean、spring-context等，而这些配置通常都是重复添加的，而且需要做很多框架使用及环境参数的重复配置，如开启注解、配置日志等。</p>
+<p>Spring Boot致力于弱化这些不必要的操作，提供默认配置，当然这些默认配置是可以按需修改的，快速搭建、开发和运行Spring应用。</p>
+<p>Spring Boot 的主要优点：</p>
+<ul>
+<li><p><strong>简化开发</strong>：Spring Boot通过约定大于配置的原则和自动化配置，大大简化了Java应用程序的开发和部署过程。开发者无需处理繁琐的配置，可以快速搭建项目并专注于业务逻辑的实现。</p>
+</li>
+<li><p><strong>集成性强</strong>：Spring Boot提供了大量的起步依赖，涵盖了各种常见的库、框架和组件，使得集成第三方库和服务变得更加容易。同时，Spring Boot内置了大量的功能，如内置容器、安全性、监控等，可以快速集成这些功能到项目中。</p>
+</li>
+<li><p><strong>独立运行</strong>：Spring Boot应用程序可以独立运行，内嵌了常用的Web服务器，如Tomcat、Jetty等，使得部署变得简单。开发者无需额外配置Web服务器，只需执行一个可执行的JAR文件即可启动应用。</p>
+</li>
+<li><p><strong>微服务友好</strong>：Spring Boot非常适合构建微服务架构，其轻量级、模块化的特性使得微服务之间的通信和部署变得更加方便。结合Spring Cloud等微服务组件，可以更好地实现微服务架构下的各种功能。</p>
+</li>
+</ul>
+<h3 id="讲一讲Spring-Boot简化配置具体是如何简化的？"><a href="#讲一讲Spring-Boot简化配置具体是如何简化的？" class="headerlink" title="讲一讲Spring Boot简化配置具体是如何简化的？"></a>讲一讲Spring Boot简化配置具体是如何简化的？</h3><p>Spring 虽然使Java EE轻量级框架，但由于其繁琐的配置，一度被人认为是“配置地狱”。各种XML、Annotation配置会让人眼花缭乱，而且配置多的话，如果出错了也很难找出原因。Spring Boot更多的是采用 Java Config 的方式，对 Spring 进行配置。</p>
+<p>举个例子：我新建一个类，但是我不用 @Service注解，也就是说，它是个普通的类，那么我们如何使它也成为一个 Bean 让 Spring 去管理呢？只需要@Configuration 和@Bean两个注解即可，如下：</p>
+<pre><code>public class TestService &#123;
+    public String sayHello () &#123;
+        return &quot;Hello Spring Boot!&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>1</p>
+<pre><code>import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class JavaConfig &#123;
+    @Bean
+    public TestService getTestService() &#123;
+        return new TestService();
+    &#125;
+&#125;
+</code></pre>
+<p>@Configuration表示该类是个配置类，@Bean表示该方法返回一个 Bean。这样就把TestService作为 Bean 让 Spring 去管理了，在其他地方，我们如果需要使用该 Bean，和原来一样，直接使用@Resource注解注入进来即可使用，非常方便。</p>
+<pre><code>@Resource
+private TestService testService;
+</code></pre>
+<p>另外，部署配置方面，原来 Spring 有多个 xml 和 properties配置，在 Spring Boot 中只需要个 application.yml即可。</p>
+<h3 id="Spring-Boot是通过什么实现的约定大于配置？"><a href="#Spring-Boot是通过什么实现的约定大于配置？" class="headerlink" title="Spring Boot是通过什么实现的约定大于配置？"></a>Spring Boot是通过什么实现的约定大于配置？</h3><p>Spring Boot通过「自动化配置」和「起步依赖」实现了约定大于配置的特性。</p>
+<ul>
+<li><p>自动化配置：Spring Boot根据项目的依赖和环境自动配置应用程序，无需手动配置大量的XML或Java配置文件。例如，如果项目引入了Spring Web MVC依赖，Spring Boot会自动配置一个基本的Web应用程序上下文。</p>
+</li>
+<li><p>起步依赖：Spring Boot提供了一系列起步依赖，这些依赖包含了常用的框架和功能，可以帮助开发者快速搭建项目。通过引入适合项目需求的起步依赖，开发者可以快速构建出符合要求的应用程序，减少了配置的复杂度</p>
+</li>
+</ul>
+</div><div class="article_tags"><span> <i class="yufont icon-tag"></i> 标签: </span><a href="/tags/Spring/">Spring</a></div></article><div class="article-copyright"><p>标题: <a href="/2024/05/16/Spring%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/">Spring相关问题</a></p><p> 链接: <a href="/2024/05/16/Spring%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/">http://example.com/2024/05/16/Spring%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/</a></p><p> 版权声明: 若无特殊标注皆为 鹏少 原创版权, 转载请以链接形式注明作者及原始出处</p><p>最后编辑时间: 2024-05-16</p></div><div class="page_turning"><a class="page_up" href="/2024/05/15/Java%E5%9F%BA%E7%A1%80/"
+  style="background-image:url(/assets/imgs/2024-05-15_102831.png)">
+  <div class="inner"><span>上一篇:</span>
+    <p>Java基础</p>
+  </div>
+</a>
+<a class="page_down" href="javascript:;"
+style="background-image:url(/assets/images/random/28.jpg)">
+<div class="inner"><span>下一篇:</span>
+  <p>已经没有下一篇了</p>
+</div>
+</a>
+</div></div></div><div class="article_sidebar left"><div class="author_sidebar sidebar_container"><div class="author_info"><div class="avatar"><img class="yu13_img_rotate" src="/assets/imgs/avatar.png" alt=""/></div><div class="author_name"><h3><a href="/about">鹏少</a></h3><p>不断学习，不断提升！</p></div></div><div class="author_data"><ul><li> <div> <span>4</span><p>文章</p></div></li><li> <div> <span>2</span><p>分类</p></div></li><li> <div> <span>4</span><p>标签</p></div></li></ul></div></div><div class="catalogue sidebar_container"><h3 class="sidebar_title"><i class="yufont icon-feiji"></i>目录</h3><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring-Bean%E7%9A%84scope%EF%BC%88%E4%BD%9C%E7%94%A8%E5%9F%9F%EF%BC%89%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="toc-number">1.</span> <span class="toc-text">Spring Bean的scope（作用域）有哪些</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B2%E4%B8%80%E8%AE%B2AOP%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">讲一讲AOP的实现方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK-Proxy%E5%92%8CCGLib%E8%BF%98%E6%9C%89%E5%88%AB%E7%9A%84%E5%AE%9E%E7%8E%B0AOP%E7%9A%84%E6%96%B9%E5%BC%8F%E5%90%97%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">JDK Proxy和CGLib还有别的实现AOP的方式吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B2%E4%B8%80%E8%AE%B2%E5%AF%B9Spring-Boot%E7%9A%84%E7%90%86%E8%A7%A3%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8Spring-Boot%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">讲一讲对Spring Boot的理解，以及为什么要用Spring Boot？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B2%E4%B8%80%E8%AE%B2Spring-Boot%E7%AE%80%E5%8C%96%E9%85%8D%E7%BD%AE%E5%85%B7%E4%BD%93%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%80%E5%8C%96%E7%9A%84%EF%BC%9F"><span class="toc-number">5.</span> <span class="toc-text">讲一讲Spring Boot简化配置具体是如何简化的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring-Boot%E6%98%AF%E9%80%9A%E8%BF%87%E4%BB%80%E4%B9%88%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%BA%A6%E5%AE%9A%E5%A4%A7%E4%BA%8E%E9%85%8D%E7%BD%AE%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">Spring Boot是通过什么实现的约定大于配置？</span></a></li></ol></div><div class="sidebar_tags sidebar_container"><h3 class="sidebar_title"><i class="yufont icon-24gl-folderOpen"></i>分类</h3><div class="archive_lists"><ul class="category-list"><li><a href="/categories/Java/">Java (3)</a></li><li><a href="/categories/Spring/">Spring (1)</a></li></ul></div></div><div class="sidebar_tags sidebar_container"><h3 class="sidebar_title"><i class="yufont icon-tag"></i>标签</h3><a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 16px;">Java基础</a> <a href="/tags/Java%E5%B9%B6%E5%8F%91/" style="font-size: 16px;">Java并发</a> <a href="/tags/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/" style="font-size: 16px;">Java虚拟机</a> <a href="/tags/Spring/" style="font-size: 16px;">Spring</a></div></div></div><footer class="footer"> <div class="footer_bottom"><div class="footer_box"><div class="copy"><span>© 2024<a href="/">鹏少的博客</a></span></div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"> </script><script src="/assets/lib/prettify/prettify.js"> </script><script src="/assets/lib/fancybox/fancybox.js"> </script><script src="/assets/js/app.js"> </script></div></body></html>
