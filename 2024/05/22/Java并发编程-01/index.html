@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><link rel="shortcut icon" href="/assets/imgs/psd.svg" type="image/x-icon"><title>Java并发编程-01 | 鹏少的博客</title><meta name="keywords" content="Java并发"><meta name="keywords" content=""><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"><link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3435803_wadmwlqwhps.css"><link rel="stylesheet" href="/style/index.css"><link rel="stylesheet" href="/assets/lib/prettify/prettify.css"><link rel="stylesheet" href="/assets/lib/fancybox/fancybox.css"><meta name="generator" content="Hexo 7.2.0"><link rel="alternate" href="/atom.xml" title="鹏少的博客" type="application/atom+xml">
+</head><body><div id="app"><header class="header yu13_p_30" id="header"><div class="header_left"><h1 class="yu13_logo"><a id="logo" href="/">鹏少的博客</a></h1></div><div class="header_right"><div class="header_search yu13_cursor yu13_hover" id="search"><i class="yufont icon-sousuo"></i></div><div class="line yu13_p_10"></div><nav class="header_nav"><ul class="nav"><li class="menu_nav"><a href="/"><i class="fas"></i><span> 首页</span></a></li><li class="menu_nav"><a href="/archives"><i class="fas"></i><span> 归档</span></a></li><li class="menu_nav"><a href="/categories"><i class="fas"></i><span> 分类</span></a></li><li class="menu_nav"><a href="/tags"><i class="fas"></i><span> 标签</span></a></li><li class="menu_nav"><a href="/./0204/index.html"><i class="fas"></i><span> 友情链接</span></a></li></ul></nav></div></header><div class="article_topbg" style="background-image: url('/assets/imgs/home_top_2.png')"><div class="topbg_container"><h1 class="title">Java并发编程-01</h1><div class="info"><div class="article_meta"><div class="left"><span class="avatar"><img class="yu13_img_rotate" src="/assets/imgs/avatar.png" alt=""/><a href="/about">鹏少</a></span><span><i class="yufont icon-yingyong"></i><a href="/categories/Java/">Java</a></span><span><i class="yufont icon-rili"></i>2024-5-22</span></div></div></div></div></div><div class="container log_container clearfix"><div class="article_content left"> <div class="article_main"><article class="content"><div class="content_text article_text"> <h3 id="进程和线程的区别"><a href="#进程和线程的区别" class="headerlink" title="进程和线程的区别"></a>进程和线程的区别</h3><p>进程和线程都是操作系统用于并发执行的方式，但是它们在资源管理、独立性、开销以及影响范围等方面有所不同。</p>
+<p>*进程是操作系统分配资源的基本单位，线程是操作系统调度的基本单位。</p>
+<p>*进程拥有独立的内存空间，线程共享所属进程的内存空间。</p>
+<p>*进程的创建和销毁需要资源的分配和回收，开销较大；线程的创建和销毁只需要保存寄存器和栈信息，开销较小。</p>
+<p>*进程间的通信比较复杂，而线程间的通信比较简单。</p>
+<p>*进程间是相互独立的，一个进程崩溃不会影响其他进程；线程间是相互依赖的，一个线程崩溃可能影响整个程序的稳定性。</p>
+<h3 id="创建线程的三种方式"><a href="#创建线程的三种方式" class="headerlink" title="创建线程的三种方式"></a>创建线程的三种方式</h3><p>*创建一个类继承 <strong>Thread 类</strong>，并重写 <strong>run</strong> 方法。</p>
+<p>*创建一个类实现 <strong>Runnable 接口</strong>，并重写 <strong>run</strong> 方法。</p>
+<p>*实现 <strong>Callable 接口</strong>，重写 <strong>call</strong> 方法，这种方式可以通过 FutureTask 获取任务执行的返回值。</p>
+<h3 id="为什么要重写-run-方法？"><a href="#为什么要重写-run-方法？" class="headerlink" title="为什么要重写 run 方法？"></a>为什么要重写 run 方法？</h3><p>因为默认的run()方法不会做任何事情。 为了让线程执行一些实际的任务，我们需要提供自己的run()方法实现，这就需要重写run()方法。</p>
+<h3 id="run-方法和-start-方法有什么区别？"><a href="#run-方法和-start-方法有什么区别？" class="headerlink" title="run 方法和 start 方法有什么区别？"></a>run 方法和 start 方法有什么区别？</h3><p>***run()**：封装线程执行的代码，直接调用相当于调用普通方法。</p>
+<p>***start()**：启动线程，然后由 JVM 调用此线程的 run() 方法。</p>
+<h3 id="通过继承-Thread-的方法和实现-Runnable-接口的方式创建多线程，哪个好？"><a href="#通过继承-Thread-的方法和实现-Runnable-接口的方式创建多线程，哪个好？" class="headerlink" title="通过继承 Thread 的方法和实现 Runnable 接口的方式创建多线程，哪个好？"></a>通过继承 Thread 的方法和实现 Runnable 接口的方式创建多线程，哪个好？</h3><p>实现 Runable 接口好：</p>
+<p>*避免了 Java 单继承的局限性，Java 不支持多重继承，因此如果我们的类已经继承了另一个类，就不能再继承 Thread 类了。</p>
+<p>*适合多个相同的程序代码去处理同一资源的情况，把线程、代码和数据有效的分离，更符合面向对象的设计思想。Callable 接口与 Runnable 非常相似，但可以返回一个结果。</p>
+<h3 id="线程的6种状态"><a href="#线程的6种状态" class="headerlink" title="线程的6种状态"></a>线程的6种状态</h3><p>线程被视为轻量级的进程，所以线程状态其实和进程状态是一致的。<br><strong>NEW</strong><br>处于 NEW 状态的线程此时尚未启动。这里的尚未启动指的是还没调用 Thread 实例的start()方法。</p>
+<p><strong>RUNNABLE</strong><br>表示当前线程正在运行中。处于 RUNNABLE 状态的线程在 Java 虚拟机中运行，也有可能在等待 CPU 分配资源。</p>
+<p>Java 线程的RUNNABLE状态其实包括了操作系统线程的ready和running两个状态。</p>
+<p><strong>BLOCKED</strong><br>阻塞状态。处于 BLOCKED 状态的线程正等待锁的释放以进入同步区。</p>
+<p><strong>WAITING</strong><br>等待状态。处于等待状态的线程变成 RUNNABLE 状态需要其他线程唤醒。</p>
+<p>3 个方法会使线程进入等待状态：</p>
+<p>*Object.wait()：使当前线程处于等待状态直到另一个线程唤醒它；</p>
+<p>*Thread.join()：等待线程执行完毕，底层调用的是 Object 的 wait 方法；</p>
+<p>*LockSupport.park()：除非获得调用许可，否则禁用当前线程进行线程调度。</p>
+<p><strong>TIMED_WAITING</strong><br>超时等待状态。线程等待一个具体的时间，时间到后会被自动唤醒。</p>
+<p>如下方法会使线程进入超时等待状态：</p>
+<p>*Thread.sleep(long millis)：使当前线程睡眠指定时间；</p>
+<p>*Object.wait(long timeout)：线程休眠指定时间，等待期间可以通过notify()&#x2F;notifyAll()唤醒；</p>
+<p>*Thread.join(long millis)：等待当前线程最多执行 millis 毫秒，如果 millis 为 0，则会一直执行；</p>
+<p>*LockSupport.parkNanos(long nanos)： 除非获得调用许可，否则禁用当前线程进行线程调度指定时间；</p>
+<p>*LockSupport.parkUntil(long deadline)：同上，也是禁止线程进行调度指定时间；</p>
+<p><strong>TERMINATED</strong><br>终止状态。此时线程已执行完毕。</p>
+<p><img src="/assets/imgs/2024-05-22_170047.png" alt="线程状态转换图"></p>
+<h3 id="Java的内存模型（JMM）"><a href="#Java的内存模型（JMM）" class="headerlink" title="Java的内存模型（JMM）"></a>Java的内存模型（JMM）</h3><p>*Java 内存模型（JMM）定义了 Java 程序中的变量、线程如何和主存以及工作内存进行交互的规则。它主要涉及到多线程环境下的共享变量可见性、指令重排等问题，是理解并发编程中的关键概念。</p>
+<p>*Java 内存模型（JMM）主要针对的是多线程环境下，如何在主内存与工作内存之间安全地执行操作。</p>
+<p>*Java 运行时内存区域描述的是在 JVM 运行时，如何将内存划分为不同的区域，并且每个区域的功能和工作机制。主要包括方法区、堆、栈、本地方法栈、程序计数器。</p>
+<p>*指令重排是为了提高 CPU 性能，但是可能会导致一些问题，比如多线程环境下的内存可见性问题。</p>
+<p>*happens-before 规则是 JMM 提供的强大的内存可见性保证，只要遵循 happens-before 规则，那么我们写的程序就能保证在 JMM 中具有强的内存可见性。</p>
+<h3 id="volatile关键字"><a href="#volatile关键字" class="headerlink" title="volatile关键字"></a>volatile关键字</h3><p>volatile 可以保证线程可见性且提供了一定的有序性，但是无法保证原子性。在 JVM 底层 volatile 是采用“内存屏障”来实现的。</p>
+<p>观察加入 volatile 关键字和没有加入 volatile 关键字时所生成的汇编代码就能发现，加入 volatile 关键字时，会多出一个 lock 前缀指令，lock 前缀指令实际上相当于一个内存屏障（也称内存栅栏），内存屏障会提供 3 个功能：</p>
+<p>*它确保指令重排序时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面；即在执行到内存屏障这句指令时，在它前面的操作已经全部完成；</p>
+<p>*它会强制将对缓存的修改操作立即写入主存；</p>
+<p>*如果是写操作，它会导致其他 CPU 中对应的缓存行无效。</p>
+<h3 id="synchronized关键字"><a href="#synchronized关键字" class="headerlink" title="synchronized关键字"></a>synchronized关键字</h3><p>synchronized 可以保证在同一个时刻，只有一个线程可以执行某个方法或者某个代码块(主要是对方法或者代码块中存在共享数据的操作)，<br>同时我们还应该注意到 synchronized 的另外一个重要的作用，synchronized 可保证一个线程的变化(主要是共享数据的变化)被其他线程所看到（保证可见性，完全可以替代 volatile 功能）。</p>
+<p>synchronized 关键字最主要有以下 3 种应用方式：</p>
+<p>*同步方法，为当前对象（this）加锁，进入同步代码前要获得当前对象的锁；</p>
+<p>*同步静态方法，为当前类加锁（锁的是 Class 对象），进入同步代码前要获得当前类的锁；</p>
+<p>*同步代码块，指定加锁对象，对给定对象加锁，进入同步代码库前要获得给定对象的锁。</p>
+<p>synchronized属于可重入锁：从互斥锁的设计上来说，当一个线程试图操作一个由其他线程持有的对象锁的临界资源时，将会处于阻塞状态，但当一个线程再次请求自己持有对象锁的临界资源时，这种情况属于重入锁，请求将会成功。</p>
+<p>同步会带来一定的性能开销，因此需要合理使用。不应将整个方法或者更大范围的代码块做同步，而应尽可能地缩小同步范围。</p>
+<h3 id="synchronized的四种锁状态"><a href="#synchronized的四种锁状态" class="headerlink" title="synchronized的四种锁状态"></a>synchronized的四种锁状态</h3><p>在 JDK 1.6 及其以后，一个对象其实有四种锁状态，它们级别由低到高依次是：</p>
+<p>*无锁状态</p>
+<p>*偏向锁状态</p>
+<p>*轻量级锁状态</p>
+<p>*重量级锁状态</p>
+<p>几种锁会随着竞争情况逐渐升级，锁的升级很容易发生，但是锁降级发生的条件就比较苛刻了，锁降级发生在 Stop The World期间，当 JVM 进入安全点的时候，会检查是否有闲置的锁，然后进行降级。</p>
+<p><strong>无锁</strong><br>无锁就是没有对资源进行锁定，任何线程都可以尝试去修改它。</p>
+<p><strong>偏向锁</strong><br>偏向锁会偏向于第一个访问锁的线程，如果在接下来的运行过程中，该锁没有被其他的线程访问，则持有偏向锁的线程将永远不需要触发同步。也就是说，偏向锁在资源无竞争情况下消除了同步语句，连 CAS操作都不做了，着极大地提高了程序的运行性能。</p>
+<p>偏向锁使用了一种等到竞争出现才释放锁的机制，所以当其他线程尝试竞争偏向锁时，持有偏向锁的线程才会释放锁。</p>
+<p><strong>轻量级锁</strong><br>多个线程在不同时段获取同一把锁，即不存在锁竞争的情况，也就没有线程阻塞。针对这种情况，JVM 采用轻量级锁来避免线程的阻塞与唤醒。</p>
+<p><strong>重量级锁</strong><br>重量级锁依赖于操作系统的互斥锁（mutex，用于保证任何给定时间内，只有一个线程可以执行某一段特定的代码段） 实现，而操作系统中线程间状态的转换需要相对较长的时间，所以重量级锁效率很低，但被阻塞的线程不会消耗 CPU。</p>
+<h3 id="锁的升级流程"><a href="#锁的升级流程" class="headerlink" title="锁的升级流程"></a>锁的升级流程</h3><p>每一个线程在准备获取共享资源时：<br>*①检查 MarkWord 里面是不是放的自己的 ThreadId ,如果是，表示当前线程是处于 “偏向锁” 。</p>
+<p>*②如果 MarkWord 不是自己的 ThreadId，锁升级，这时候，用 CAS 来执行切换，新的线程根据 MarkWord 里面现有的 ThreadId，通知之前线程暂停，之前线程将 Markword 的内容置为空。</p>
+<p>*③两个线程都把锁对象的 HashCode 复制到自己新建的用于存储锁的记录空间，接着开始通过 CAS 操作，<br>把锁对象的 MarKword 的内容修改为自己新建的记录空间的地址的方式竞争 MarkWord。</p>
+<p>*④第③步中成功执行 CAS 的获得资源，失败的则进入自旋 。</p>
+<p>*⑤自旋的线程在自旋过程中，成功获得资源(即之前获的资源的线程执行完成并释放了共享资源)，则整个状态依然处于 轻量级锁的状态，如果自旋失败 。</p>
+<p>*⑥进入重量级锁的状态，这个时候，自旋的线程进行阻塞，等待之前线程执行完成并唤醒自己。</p>
+<h3 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h3><p>CAS（Compare-and-Swap）是一种乐观锁的实现方式，全称为“比较并交换”，是一种无锁的原子操作。</p>
+<p>在 CAS 中，有这样三个值： V：要更新的变量(var)、E：预期值(expected)和N：新值(new)。</p>
+<p>比较并交换的过程如下： 判断 V 是否等于 E，如果等于，将 V 的值设置为 N；如果不等，说明已经有其它线程更新了 V，于是当前线程放弃更新，什么都不做。</p>
+<p>当多个线程同时使用 CAS 操作一个变量时，只有一个会胜出，并成功更新，其余均会失败，但失败的线程并不会被挂起，仅是被告知失败，并且允许再次尝试，当然也允许失败的线程放弃操作。</p>
+<h3 id="CAS-的三大问题"><a href="#CAS-的三大问题" class="headerlink" title="CAS 的三大问题"></a>CAS 的三大问题</h3><p>尽管 CAS 提供了一种有效的同步手段，但也存在一些问题，主要有以下三个：ABA 问题、长时间自旋、多个共享变量的原子操作。<br><strong>ABA 问题</strong><br>所谓的 ABA 问题，就是一个值原来是 A，变成了 B，又变回了 A。这个时候使用 CAS 是检查不出变化的，但实际上却被更新了两次。</p>
+<p>ABA 问题的解决思路是在变量前面追加上版本号或者时间戳。从 JDK 1.5 开始，JDK 的 atomic 包里提供了一个类AtomicStampedReference类来解决 ABA 问题。</p>
+<p><strong>长时间自旋</strong><br>CAS 多与自旋结合。如果自旋 CAS 长时间不成功，会占用大量的 CPU 资源。</p>
+<p>解决思路是让 JVM 支持处理器提供的pause 指令。</p>
+<p>pause 指令能让自旋失败时 cpu 睡眠一小段时间再继续自旋，从而使得读操作的频率降低很多，为解决内存顺序冲突而导致的 CPU 流水线重排的代价也会小很多。</p>
+<p><strong>多个共享变量的原子操作</strong><br>当对一个共享变量执行操作时，CAS 能够保证该变量的原子性。但是对于多个共享变量，CAS 就无法保证操作的原子性，这时通常有两种做法：</p>
+<p>*使用AtomicReference类保证对象之间的原子性，把多个变量放到一个对象里面进行 CAS 操作；</p>
+<p>*使用锁。锁内的临界区代码可以保证只有当前线程能操作。</p>
+</div><div class="article_tags"><span> <i class="yufont icon-tag"></i> 标签: </span><a href="/tags/Java%E5%B9%B6%E5%8F%91/">Java并发</a></div></article><div class="article-copyright"><p>标题: <a href="/2024/05/22/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-01/">Java并发编程-01</a></p><p> 链接: <a href="/2024/05/22/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-01/">http://example.com/2024/05/22/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-01/</a></p><p> 版权声明: 若无特殊标注皆为 鹏少 原创版权, 转载请以链接形式注明作者及原始出处</p><p>最后编辑时间: 2024-05-22</p></div><div class="page_turning"><a class="page_up" href="/2024/05/21/Java%E9%9B%86%E5%90%88%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/"
+  style="background-image:url(/assets/imgs/arrayList.png)">
+  <div class="inner"><span>上一篇:</span>
+    <p>Java集合相关问题</p>
+  </div>
+</a>
+<a class="page_down" href="javascript:;"
+style="background-image:url(/assets/images/random/33.jpg)">
+<div class="inner"><span>下一篇:</span>
+  <p>已经没有下一篇了</p>
+</div>
+</a>
+</div></div></div><div class="article_sidebar left"><div class="author_sidebar sidebar_container"><div class="author_info"><div class="avatar"><img class="yu13_img_rotate" src="/assets/imgs/avatar.png" alt=""/></div><div class="author_name"><h3><a href="/about">鹏少</a></h3><p>不断学习，不断提升！</p></div></div><div class="author_data"><ul><li> <div> <span>7</span><p>文章</p></div></li><li> <div> <span>2</span><p>分类</p></div></li><li> <div> <span>5</span><p>标签</p></div></li></ul></div></div><div class="catalogue sidebar_container"><h3 class="sidebar_title"><i class="yufont icon-feiji"></i>目录</h3><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.</span> <span class="toc-text">进程和线程的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">创建线程的三种方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%87%8D%E5%86%99-run-%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">为什么要重写 run 方法？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#run-%E6%96%B9%E6%B3%95%E5%92%8C-start-%E6%96%B9%E6%B3%95%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">run 方法和 start 方法有什么区别？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E7%BB%A7%E6%89%BF-Thread-%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E5%AE%9E%E7%8E%B0-Runnable-%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E5%BC%8F%E5%88%9B%E5%BB%BA%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%8C%E5%93%AA%E4%B8%AA%E5%A5%BD%EF%BC%9F"><span class="toc-number">5.</span> <span class="toc-text">通过继承 Thread 的方法和实现 Runnable 接口的方式创建多线程，哪个好？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%846%E7%A7%8D%E7%8A%B6%E6%80%81"><span class="toc-number">6.</span> <span class="toc-text">线程的6种状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java%E7%9A%84%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%88JMM%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">Java的内存模型（JMM）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#volatile%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">8.</span> <span class="toc-text">volatile关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronized%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">9.</span> <span class="toc-text">synchronized关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronized%E7%9A%84%E5%9B%9B%E7%A7%8D%E9%94%81%E7%8A%B6%E6%80%81"><span class="toc-number">10.</span> <span class="toc-text">synchronized的四种锁状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81%E7%9A%84%E5%8D%87%E7%BA%A7%E6%B5%81%E7%A8%8B"><span class="toc-number">11.</span> <span class="toc-text">锁的升级流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CAS"><span class="toc-number">12.</span> <span class="toc-text">CAS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CAS-%E7%9A%84%E4%B8%89%E5%A4%A7%E9%97%AE%E9%A2%98"><span class="toc-number">13.</span> <span class="toc-text">CAS 的三大问题</span></a></li></ol></div><div class="sidebar_tags sidebar_container"><h3 class="sidebar_title"><i class="yufont icon-24gl-folderOpen"></i>分类</h3><div class="archive_lists"><ul class="category-list"><li><a href="/categories/Java/">Java (6)</a></li><li><a href="/categories/Spring/">Spring (1)</a></li></ul></div></div><div class="sidebar_tags sidebar_container"><h3 class="sidebar_title"><i class="yufont icon-tag"></i>标签</h3><a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 16px;">Java基础</a> <a href="/tags/Java%E5%B9%B6%E5%8F%91/" style="font-size: 20px;">Java并发</a> <a href="/tags/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/" style="font-size: 16px;">Java虚拟机</a> <a href="/tags/Java%E9%9B%86%E5%90%88/" style="font-size: 20px;">Java集合</a> <a href="/tags/Spring/" style="font-size: 16px;">Spring</a></div></div></div><footer class="footer"> <div class="footer_bottom"><div class="footer_box"><div class="copy"><span>© 2024<a href="/">鹏少的博客</a></span></div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"> </script><script src="/assets/lib/prettify/prettify.js"> </script><script src="/assets/lib/fancybox/fancybox.js"> </script><script src="/assets/js/app.js"> </script></div></body></html>
